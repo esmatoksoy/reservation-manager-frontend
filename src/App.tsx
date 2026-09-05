@@ -1,20 +1,25 @@
 import { useEffect, useState } from 'react'
 import { useSearchParams, useParams, useLocation } from 'react-router-dom'
 import { ConfigProvider } from 'antd'
-import { GuestForm } from './components/GuestForm'
+import { GuestForm, type ReservationData } from './components/GuestForm'
 import ErrorBoundary from './ErrorBoundary'
+
+type RouteParams = {
+  requestId?: string;
+}
 
 function App() {
   const [searchParams] = useSearchParams()
-  const { requestId: pathRequestId } = useParams()
+  const { requestId: pathRequestId } = useParams<RouteParams>()
   const location = useLocation()
-  const [requestId, setRequestId] = useState(null)
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState(null)
-  const [reservationData, setReservationData] = useState(null)
+  
+  const [requestId, setRequestId] = useState<string | null>(null)
+  const [loading, setLoading] = useState<boolean>(true)
+  const [error, setError] = useState<string | null>(null)
+  const [reservationData, setReservationData] = useState<ReservationData | null>(null)
 
   useEffect(() => {
-    const fetchReservationData = async () => {
+    const fetchReservationData = async (): Promise<void> => {
       const isCreateMode = location.pathname === '/reservations/create'
 
       if (isCreateMode) {
@@ -28,11 +33,10 @@ function App() {
       // Check both query param and path param
       const id = searchParams.get('requestId') || pathRequestId
       
-      console.log('App.jsx - Current URL:', window.location.href)
-      console.log('App.jsx - requestId from URL:', id)
+      console.log('App.tsx - Current URL:', window.location.href)
+      console.log('App.tsx - requestId from URL:', id)
 
       if (!id) {
-        // No request ID provided
         setError('No reservation ID provided')
         setLoading(false)
         return
@@ -51,11 +55,11 @@ function App() {
           return
         }
 
-        const data = await response.json()
+        const data: ReservationData = await response.json()
         setReservationData(data)
         setRequestId(id)
         setLoading(false)
-      } catch (err) {
+      } catch (err: unknown) {
         console.error('Error loading reservation:', err)
         setError('Error connecting to server')
         setLoading(false)

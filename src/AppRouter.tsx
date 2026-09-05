@@ -1,10 +1,10 @@
-import { createBrowserRouter } from "react-router-dom";
+import { createBrowserRouter, type RouteObject } from "react-router-dom";
 import App from "./App";
 import ErrorBoundary from "./ErrorBoundary";
 import AdminLogin from "./components/AdminLogin";
 import RootHandler from "./RootHandler";
 
-const appRouter = createBrowserRouter([
+const routes: RouteObject[] = [
   {
     path: "/admin/login",
     element: <AdminLogin />,
@@ -29,6 +29,8 @@ const appRouter = createBrowserRouter([
     path: "*",
     element: <div>Page not found</div>,
   },
-]);
+];
+
+const appRouter = createBrowserRouter(routes);
 
 export default appRouter;

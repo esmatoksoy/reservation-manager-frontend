@@ -17,7 +17,11 @@ interface AddGuestProps {
   };
 }
 
-export const AddGuest: React.FC<AddGuestProps> = ({ index, guestData, isCreateMode = false }) => {
+export const AddGuest = ({ 
+  index, 
+  guestData, 
+  isCreateMode = false 
+}: AddGuestProps) => {
   return (
     <>
       {/* Hidden field to store guestId */}
